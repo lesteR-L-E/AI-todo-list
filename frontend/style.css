@@ -1,0 +1,11 @@
+/* 提示容器 */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: black;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  display: none;
+}

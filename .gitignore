@@ -1,0 +1,19 @@
+# mac
+.DS_Store
+
+# node
+node_modules/
+
+# 前端构建
+dist/
+build/
+
+# java
+target/
+
+# IDE
+.idea/
+.vscode/
+
+# logs
+*.log
