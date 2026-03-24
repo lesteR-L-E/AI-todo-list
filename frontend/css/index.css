@@ -1,0 +1,278 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  line-height: 1.6;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #373837;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  z-index: 1000;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+  background: #4caf50;
+  color: white;
+}
+
+/* SECTION */
+.section {
+  min-height: 100vh;
+  padding: 100px 40px 60px;
+  text-align: center;
+}
+
+.alt {
+  background: #f5f5f5;
+}
+
+/* HERO */
+#hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: white;
+}
+
+#hero h2 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+/* BUTTON */
+.btn {
+  padding: 12px 24px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.primary {
+  background: white;
+  color: #4caf50;
+}
+
+.primary:hover {
+  background: #e8f5e9;
+}
+
+.outline {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.outline:hover {
+  background: white;
+  color: #4caf50;
+}
+
+/* FEATURES */
+.feature-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.feature {
+  width: 250px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+}
+
+/* DEMO */
+.todo-demo {
+  width: 300px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.todo-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* CTA */
+.cta {
+  background: #4caf50;
+  color: white;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #373837;
+  color: white;
+}
+
+/* 登录和注册 */
+
+/* Modal 外层 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* 隐藏 */
+.hidden {
+  display: none;
+}
+
+/* 内容 */
+/* .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+} */
+.modal-content {
+  width: 800px;
+  max-width: 90%;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 关闭按钮 */
+.close-btn {
+  position: absolute;
+  top: 72px;
+  right: 209px;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 外层卡片 */
+.card {
+  width: 320px;
+  overflow: hidden; /* 关键：隐藏另一页 */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* 横向滑动轨道 */
+.form-track {
+  display: flex;
+  width: 200%; /* 两页 */
+  transition: transform 0.4s ease;
+}
+
+/* 每一页 */
+.box {
+  width: 50%; /* 各占一半 */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 滑动状态 */
+.card.show-register .form-track {
+  transform: translateX(-50%);
+}
+
+/* 基础样式 */
+.box h2 {
+  margin-bottom: 20px;
+}
+
+.box input {
+  width: 100%;
+  max-width: 260px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.box button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.box button:hover {
+  background: #45a049;
+}
+
+.switch {
+  margin-top: 10px;
+  font-size: 14px;
+  color: gray;
+  cursor: pointer;
+}

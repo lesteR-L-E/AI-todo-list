@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+}
+
+body {
+  background: #f5f6fa;
+}
+
+/* 顶部栏 */
+.topbar {
+  width: 100%;
+  height: 60px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#username {
+  font-weight: 600;
+  color: #2f3640;
+}
+
+#logout-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #ff5252;
+  color: white;
+  cursor: pointer;
+}
+
+/* 主容器 */
+.container {
+  max-width: 520px;
+  margin: 40px auto;
+  transition: all 0.4s;
+}
+
+/* 标题 */
+h1 {
+  margin-bottom: 20px;
+  color: #2f3640;
+}
+
+/* 输入区 */
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#todo-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  outline: none;
+  background: white;
+}
+
+#todo-input:focus {
+  border-color: #4caf50;
+}
+
+.btn--post {
+  padding: 0 20px;
+  border-radius: 10px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+/* 列表 */
+#todo-list {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+#todo-list li {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 左边文本 */
+#todo-list span {
+  flex: 1;
+}
+
+/* 右侧按钮区 */
+#todo-list li div {
+  display: flex;
+  gap: 8px;
+}
+
+/* 完成 */
+.btn--toggle {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #4caf50;
+  background: transparent;
+  color: #4caf50;
+  cursor: pointer;
+}
+
+.btn--toggle:hover {
+  background: #4caf50;
+  color: white;
+}
+
+/* 删除 */
+.btn--delete {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #ff5252;
+  color: white;
+  cursor: pointer;
+}
+
+/* 清除完成 */
+.btn--deleteCompleted {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #dcdde1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn--deleteCompleted:hover {
+  transform: translateY(-3px);
+}
+
+/* toast */
+#toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  display: none;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #4caf50;
+  cursor: pointer;
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* 筛选按钮容器 */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* 按钮基础样式（默认：白底绿字） */
+.filters button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #4caf50;
+  background: white;
+  color: #4caf50;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* hover 效果 */
+.filters button:hover {
+  transform: translateY(-2px);
+}
+
+/* 当前选中（绿底白字） */
+.filters button.active {
+  background: #4caf50;
+  color: white;
+  border: none;
+}

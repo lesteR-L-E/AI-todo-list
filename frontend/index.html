@@ -1,18 +1,123 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AItodo</title>
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="script.js"></script>
+    <title>AI Todo List</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <script defer src="js/index.js"></script>
   </head>
   <body>
-    <h1>Todo List</h1>
-    <input id="todo-input" placeholder="输入任务..." autocomplete="off" />
-    <button class="btn--post">添加</button>
-    <ol id="todo-list"></ol>
-    <button class="btn--deleteCompleted">Clear Completed</button>
-    <div id="toast"></div>
+    <!-- NAV -->
+    <nav id="navbar">
+      <h1>AI Todo</h1>
+      <ul>
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#demo" class="nav-link">Demo</a></li>
+        <li><a href="#cta" class="nav-link">Start</a></li>
+        <li class="nav--login"><a href="#">Login</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" class="section">
+      <h2>AI Todo List</h2>
+      <p>Organize your tasks smarter, not harder.</p>
+      <div>
+        <button class="btn primary">Get Started</button>
+        <button class="btn outline">Login</button>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="section">
+      <h2>Features</h2>
+      <div class="feature-container">
+        <div class="feature">
+          <h3>Quick Add</h3>
+          <p>Add tasks instantly with minimal effort.</p>
+        </div>
+        <div class="feature">
+          <h3>Smart Planning</h3>
+          <p>AI helps you organize your schedule.</p>
+        </div>
+        <div class="feature">
+          <h3>Clean UI</h3>
+          <p>Focus on what matters without clutter.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section id="demo" class="section alt">
+      <h2>Preview</h2>
+      <div class="todo-demo" id="demoList"></div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="section cta">
+      <h2>Start Managing Your Tasks</h2>
+      <button class="btn primary">Register Now</button>
+    </section>
+
+    <footer>
+      <p>© 2026 AI Todo List</p>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="modal hidden">
+      <div class="modal-content">
+        <!-- <span class="close-btn" id="closeModal">&times;</span> -->
+
+        <div class="container" id="container">
+          <span class="close-btn" id="closeModal">&times;</span>
+          <div class="card">
+            <div class="form-track">
+              <!-- Login -->
+              <div class="login-box box active">
+                <h2>AItodo Login</h2>
+
+                <input
+                  id="username--login"
+                  placeholder="Username"
+                  autocomplete="off"
+                />
+                <input
+                  id="password--login"
+                  type="password"
+                  placeholder="Password"
+                />
+
+                <button class="btn--login">Login</button>
+
+                <p class="switch--toRegister switch">Click to Register</p>
+              </div>
+
+              <!-- Register -->
+              <div class="register-box box">
+                <h2>AItodo Register</h2>
+
+                <input
+                  id="username--register"
+                  placeholder="Username"
+                  autocomplete="off"
+                />
+                <input
+                  id="password--register"
+                  type="password"
+                  placeholder="Password"
+                />
+
+                <button class="btn--register">Register</button>
+
+                <p class="switch--toLogin switch">Back to Login</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
