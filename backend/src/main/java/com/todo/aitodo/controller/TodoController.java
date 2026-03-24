@@ -1,9 +1,12 @@
 package com.todo.aitodo.controller;
 
+import com.todo.aitodo.dto.TodoResponse;
 import com.todo.aitodo.model.Todo;
 import com.todo.aitodo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +21,8 @@ public class TodoController {
 
     // 获取全部
     @GetMapping
-    public List<Todo> getAll() {
-        return todoService.getAllTodos();
+    public List<TodoResponse> getTodos() {
+        return todoService.getCurrentUserTodos();
     }
 
     // 新建
