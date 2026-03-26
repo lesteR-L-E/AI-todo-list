@@ -91,6 +91,15 @@ public class AIService {
               }
             ]
             
+            Input: 今天之前写作业
+            Output:
+            [
+              {
+                "title": "写作业",
+                "dueDate": current time
+              }
+            ]
+            
             Input: 下周一开会
             Output:
             [
