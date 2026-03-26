@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/todos';
+const API_URL = 'http://localhost:8080';
 const token = localStorage.getItem('token');
 
 let allTodos = []; // 所有数据
@@ -7,6 +7,7 @@ let currentFilter = 'all'; //当前筛选
 const btnPost = document.querySelector('.btn--post');
 const btnDeleteCompleted = document.querySelector('.btn--deleteCompleted');
 const logoutBtn = document.getElementById('logout-btn');
+const btnAI = document.querySelector('.btn--ai');
 
 const todoList = document.getElementById('todo-list');
 const username = localStorage.getItem('username');
@@ -19,10 +20,22 @@ function renderTodos() {
   const list = document.getElementById('todo-list');
   list.innerHTML = '';
 
-  const todos = getFilteredTodos();
+  const todos = sortTodos(getFilteredTodos());
 
   todos.forEach(todo => {
     const li = document.createElement('li');
+    const now = new Date();
+    const isOverdue =
+      todo.dueDate && !todo.completed && new Date(todo.dueDate) < now;
+
+    if (isOverdue) {
+      li.classList.add('overDue');
+    }
+
+    const timeAgo = formatTimeAgo(todo.updatedAt);
+    const ddl = todo.dueDate
+      ? new Date(todo.dueDate).toLocaleDateString()
+      : null;
 
     li.innerHTML = `
       <label class="todo-item">
@@ -32,10 +45,19 @@ function renderTodos() {
           data-id="${todo.id}"
           ${todo.completed ? 'checked' : ''}
         />
-        <span class="${todo.completed ? 'completed' : ''}">
-          ${todo.title}
-        </span>
+
+        <div class="todo-content">
+          <div class="todo-title ${todo.completed ? 'completed' : ''}">
+            ${todo.title}
+          </div>
+
+          ${ddl ? `<div class="todo-ddl">DDL: ${ddl}</div>` : ''}
+        </div>
       </label>
+
+      <div class="todo-meta">
+        ${timeAgo}
+      </div>
 
       <div>
         <button class="btn--delete" data-id="${todo.id}">
@@ -46,6 +68,20 @@ function renderTodos() {
 
     list.appendChild(li);
   });
+}
+
+//规范时间
+function formatTimeAgo(timeStr) {
+  const now = new Date();
+  const time = new Date(timeStr);
+  const diff = Math.floor((now - time) / 1000);
+
+  if (diff < 60) return '刚刚';
+  if (diff < 3600) return `${Math.floor(diff / 60)}分钟前`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}小时前`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}天前`;
+
+  return time.toLocaleDateString();
 }
 
 //更新筛选UI
@@ -71,7 +107,7 @@ function getFilteredTodos() {
 // 获取所有 todo
 async function fetchTodos() {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/todos`, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + token,
@@ -84,6 +120,7 @@ async function fetchTodos() {
 
     const data = await response.json();
     allTodos = data;
+    // console.log(data);
     renderTodos();
   } catch (error) {
     console.error(error);
@@ -95,9 +132,13 @@ async function addTodoSingle() {
   const input = document.getElementById('todo-input');
   const title = input.value;
 
+  const ddl_input = document.getElementById('todo-ddl-input');
+  const ddl = ddl_input.value ? ddl_input.value + 'T00:00:00' : null;
+  // console.log(ddl);
+
   if (!title) return;
 
-  await fetch(API_URL, {
+  await fetch(`${API_URL}/todos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -106,7 +147,7 @@ async function addTodoSingle() {
     body: JSON.stringify({
       title: title,
       completed: false,
-      userId: 1,
+      dueDate: ddl,
     }),
   });
 
@@ -114,9 +155,63 @@ async function addTodoSingle() {
   fetchTodos(); // 重新加载列表
 }
 
+//批量增加任务
+async function addTodosBatch() {
+  const input = document.getElementById('ai-input');
+  const titles = input.value;
+
+  const tasks = await parseWithAI(titles);
+  // console.log(tasks);
+
+  await fetch(`${API_URL}/todos/batch`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: JSON.stringify(
+      tasks.map(t => ({
+        title: t.title,
+        completed: false,
+        dueDate: t.dueDate || null,
+      })),
+    ),
+  });
+
+  input.value = '';
+  fetchTodos(); // 刷新列表
+}
+
+//AI交互
+async function parseWithAI(text) {
+  try {
+    const res = await fetch(`${API_URL}/ai/parse`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!res.ok) {
+      throw new Error('HTTP error ' + res.status);
+    }
+
+    const datas = await res.json();
+
+    // console.log('AI返回:', datas);
+
+    return datas;
+  } catch (err) {
+    console.error('请求失败:', err);
+    throw err;
+  }
+}
+
 //删除任务
 async function deleteTodo(id) {
-  await fetch(`${API_URL}/${id}`, {
+  await fetch(`${API_URL}/todos/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: 'Bearer ' + token,
@@ -128,7 +223,7 @@ async function deleteTodo(id) {
 
 //删除已完成任务
 async function deleteCompleteTodo() {
-  const response = await fetch(`${API_URL}/completed`, {
+  const response = await fetch(`${API_URL}/todos/completed`, {
     method: 'DELETE',
     headers: {
       Authorization: 'Bearer ' + token,
@@ -141,7 +236,7 @@ async function deleteCompleteTodo() {
 
 //更新任务
 async function toggleTodo(id, completed) {
-  await fetch(`${API_URL}/${id}`, {
+  await fetch(`${API_URL}/todos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -166,6 +261,20 @@ function showToast(message) {
     toast.style.display = 'none';
     toast.innerText = '';
   }, 2000);
+}
+
+//根据ddl时间进行排序
+function sortTodos(todos) {
+  return todos.sort((a, b) => {
+    const aDDL = a.dueDate ? new Date(a.dueDate) : null;
+    const bDDL = b.dueDate ? new Date(b.dueDate) : null;
+
+    if (!aDDL && !bDDL) return 0;
+    if (!aDDL) return 1;
+    if (!bDDL) return -1;
+
+    return aDDL - bDDL;
+  });
 }
 
 ///////////////////////////////////////////////////////////////
@@ -240,3 +349,6 @@ document.getElementById('filter-completed').onclick = () => {
   renderTodos();
   updateFilterUI();
 };
+
+//AI解析按钮
+btnAI.addEventListener('click', addTodosBatch);
