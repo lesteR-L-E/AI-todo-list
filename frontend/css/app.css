@@ -50,7 +50,8 @@ h1 {
 
 /* 输入区 */
 .input-group {
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr auto;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -65,6 +66,20 @@ h1 {
 }
 
 #todo-input:focus {
+  border-color: #4caf50;
+}
+
+#todo-ddl-input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  outline: none;
+  background: white;
+  color: #2f3640;
+  cursor: pointer;
+}
+
+#todo-ddl-input:focus {
   border-color: #4caf50;
 }
 
@@ -84,16 +99,17 @@ h1 {
 }
 
 #todo-list li {
-  background: white;
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 12px;
-
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 120px 80px;
   align-items: center;
 
+  padding: 14px;
+  border-radius: 12px;
+  background: white;
+  margin-bottom: 12px;
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: visible;
 }
 
 /* 左边文本 */
@@ -105,6 +121,11 @@ h1 {
 #todo-list li div {
   display: flex;
   gap: 8px;
+}
+
+#todo-list li > div:last-child {
+  display: flex;
+  justify-content: center;
 }
 
 /* 完成 */
@@ -130,6 +151,7 @@ h1 {
   background: #ff5252;
   color: white;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* 清除完成 */
@@ -161,11 +183,13 @@ h1 {
 
 .todo-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 
 .todo-checkbox {
+  justify-self: center;
+  align-self: center;
   width: 16px;
   height: 16px;
   accent-color: #4caf50;
@@ -206,4 +230,99 @@ h1 {
   background: #4caf50;
   color: white;
   border: none;
+}
+
+/* 内容容器 */
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 4px;
+  min-width: 0;
+  align-items: center;
+  height: 100%;
+  padding: 8px 0;
+}
+
+/* 标题 */
+.todo-title {
+  font-size: 15px;
+  color: #2f3640;
+  word-break: break-word;
+}
+
+/* DDL（用颜色区分） */
+/* .todo-ddl {
+  position: absolute;
+  top: 20px; 
+  left: 0;
+  font-size: 12px;
+  color: #e67e22; 
+  margin-top: 0px;
+} */
+.todo-ddl {
+  position: absolute;
+  left: 0;
+  bottom: -9px; /* 在下面“贴着” */
+  font-size: 12px;
+  color: #e67e22;
+  white-space: nowrap;
+}
+
+/* 中间时间（更新时间） */
+.todo-meta {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+.overDue {
+  border: 2px solid #ff5252;
+}
+
+.ai-group {
+  display: grid;
+  grid-template-columns: 4fr 1fr; /* 关键：4:1 */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#ai-input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  outline: none;
+  background: white;
+  position: relative;
+  z-index: 1;
+  border: 3px solid transparent;
+}
+
+/* 用伪元素做流光边框 */
+#ai-input:focus {
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(90deg, #00dbde, #fc00ff, #00dbde) border-box;
+  background-size: 200% 200%;
+  animation: glow-border 3s linear infinite;
+}
+
+/* 动画 */
+@keyframes glow-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.btn--ai {
+  border-radius: 10px;
+  border: none;
+  background: #2196f3; /* 蓝色区分 AI */
+  color: white;
+  cursor: pointer;
 }

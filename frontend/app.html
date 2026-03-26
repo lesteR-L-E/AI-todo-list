@@ -18,11 +18,21 @@
 
     <!-- 主内容 -->
     <div class="container">
-      <h1>Todo List</h1>
+      <h1>AI Todo List</h1>
 
       <div class="input-group">
         <input id="todo-input" placeholder="输入任务..." autocomplete="off" />
+        <input id="todo-ddl-input" type="date" />
         <button class="btn--post">添加</button>
+      </div>
+
+      <div class="ai-group">
+        <input
+          id="ai-input"
+          placeholder="用 AI 生成任务，例如：明天写作业和复习算法"
+          autocomplete="off"
+        />
+        <button class="btn--ai">AI解析</button>
       </div>
 
       <div class="filters">

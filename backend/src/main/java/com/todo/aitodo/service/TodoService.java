@@ -1,5 +1,6 @@
 package com.todo.aitodo.service;
 
+import com.todo.aitodo.dto.TodoRequest;
 import com.todo.aitodo.dto.TodoResponse;
 import com.todo.aitodo.model.Todo;
 import com.todo.aitodo.model.User;
@@ -54,46 +55,67 @@ public class TodoService {
 
         return todoRepository.findByUser(user)
                 .stream()
-                .map(todo -> new TodoResponse(
-                        todo.getId(),
-                        todo.getTitle(),
-                        todo.getCompleted()
-                ))
+                .map(this::toResponse)
                 .toList();
     }
 
     // 创建
-    public Todo createTodo(Todo todo) {
-        if (todo.getTitle() == null || todo.getTitle().trim().isEmpty()) {
+    public TodoResponse createTodo(TodoRequest request) {
+
+        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "title不能为空");
         }
 
-        todo.setUser(getCurrentUser());
+        User user = getCurrentUser();
 
-        if (todo.getCompleted() == null) {
-            todo.setCompleted(false);
-        }
+        Todo todo = new Todo();
+        todo.setTitle(request.getTitle());
+        todo.setUser(user);
+        todo.setCompleted(
+                request.getCompleted() != null ? request.getCompleted() : false
+        );
+        todo.setDueDate(request.getDueDate());
 
-        return todoRepository.save(todo);
+        Todo saved = todoRepository.save(todo);
+
+        return toResponse(saved);
+    }
+
+    private TodoResponse toResponse(Todo todo) {
+        return new TodoResponse(
+                todo.getId(),
+                todo.getTitle(),
+                todo.getCompleted(),
+                todo.getDueDate(),
+                todo.getCreatedAt(),
+                todo.getUpdatedAt()
+        );
     }
 
     //创建多任务
     @Transactional
-    public List<Todo> createTodos(List<Todo> todos) {
+    public List<TodoResponse> createTodos(List<TodoRequest> requests) {
+
         User user = getCurrentUser();
-        for(Todo todo : todos) {
-            if (todo.getTitle() == null || todo.getTitle().trim().isEmpty()) {
+
+        List<Todo> todos = requests.stream().map(req -> {
+            if (req.getTitle() == null || req.getTitle().trim().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "title不能为空");
             }
 
+            Todo todo = new Todo();
+            todo.setTitle(req.getTitle());
             todo.setUser(user);
+            todo.setCompleted(req.getCompleted() != null ? req.getCompleted() : false);
+            todo.setDueDate(req.getDueDate());
 
-            if (todo.getCompleted() == null) {
-                todo.setCompleted(false);
-            }
-        }
+            return todo;
+        }).toList();
 
-        return todoRepository.saveAll(todos);
+        return todoRepository.saveAll(todos)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     // 删除
@@ -122,23 +144,29 @@ public class TodoService {
     }
 
     // 更新
-    public Todo updateTodo(Long id, Todo todo) {
+    public TodoResponse updateTodo(Long id, TodoRequest request) {
         User user = getCurrentUser();
 
         Todo existing = todoRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (todo.getTitle() != null) {
-            if (todo.getTitle().trim().isEmpty()) {
+        if (request.getTitle() != null) {
+            if (request.getTitle().trim().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "title不能为空");
             }
-            existing.setTitle(todo.getTitle());
+            existing.setTitle(request.getTitle());
         }
 
-        if (todo.getCompleted() != null) {
-            existing.setCompleted(todo.getCompleted());
+        if (request.getCompleted() != null) {
+            existing.setCompleted(request.getCompleted());
         }
 
-        return todoRepository.save(existing);
+        if (request.getDueDate() != null) {
+            existing.setDueDate(request.getDueDate());
+        }
+
+        Todo saved = todoRepository.save(existing);
+
+        return toResponse(saved);
     }
 }
